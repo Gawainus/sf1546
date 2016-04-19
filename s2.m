@@ -1,14 +1,19 @@
 % construct A
 
+% error stuff
+error=1;
+u_2_old=0;
 % number of sections
-N=80;
-K=3.15583; %3.156
+N=200;
+K=3.24606; %3.156
 Te=20;
 
-u_0=450;
+u_0=460;
 r_start=1;
 r_end=2;
-    
+
+while error>exp(-10)
+
 h=(r_end-r_start)/N;
 
 % from r0 to rN
@@ -33,16 +38,20 @@ D_p1=diag(v_p1,1);
 D_m1=diag(v_m1,-1);
 
 A=D+D_p1+D_m1;
-A(N,N-2)=r(end)/h^2+1/(2*h);
-A(N,N-1)=-2*(r(end)/h^2+1/h);
-A(N,N)=r(end)/h^2+1.5/h;
+A(N,N)=-(2*r(end)/h^2+2*K*r(end)/h+K);
+A(N,N-1)=2*r(end)/h^2;
 
-E=0.00995;
 % construct b
 b=zeros(N,1);
 b(1)=-(r(1)/h^2-1/(2*h))*u_0;
-b(N)=(2*r(end)/h+1)*E;
+
+%-KTe(2h/h+1)
+b(N)=-K*Te*(2*r(end)/h+1);
 
 u=A\b;
+error=abs(u(end)-u_2_old);
+u_2_old=u(end);
+N=N*2;
+end
 
-display(u)
+display(u(end));
