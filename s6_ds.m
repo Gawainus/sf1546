@@ -1,14 +1,3 @@
-N=25
-u = ones(N*2,1)
-u_old = zeros(N*2,1)
-test = [1]
-while abs(u(end)-u_old(end)) > 0.5
-u_old = u
-test = test + [abs(u(end)-u_old(end))] 
-% number of sections
-N=N*2;
-K=1; %3.156
-
 u_0=100;
 r_start=1;
 r_end=2;
@@ -16,6 +5,16 @@ r_end=2;
 alpha = 100
 deltabetaepsilon = (5.67 * 10^-8)*0.3
 k = 20
+
+
+N=25
+u = ones(N*2,1)
+u_old = zeros(N*2,1)
+
+while abs(u(end)-u_old(end)) > 0.5
+u_old = u
+% number of sections
+N=N*2;
 
 h=(r_end-r_start)/N
 
@@ -48,8 +47,7 @@ A(N,N-1)=(2*r(end))/h^2;
 
 corr = ones(N,1)
 
-%F = A
-%J = A  %The jacobian only differs from A in the last row.
+
 
 u = startguess_u'
 
@@ -57,8 +55,6 @@ itercheck = 1
 dominance_radiation = -1
 
 Te = 200
-
-
 
 while dominance_radiation <= 0
   Te = Te + 100
@@ -76,7 +72,7 @@ end
 end
 figure
 plot(r,u)
-title('Plot of Temperature with respect to Radius, K=1')
+title('Plot of Temperature with respect to Radius, Te=1200')
 xlabel('radius, cm')
 ylabel('temperature, Celsius')
 
